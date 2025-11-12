@@ -1,0 +1,33 @@
+#!/bin/bash
+clear 
+# Verifica se um nome de arquivo foi fornecido como argumento
+if [ -z "$1" ]; then
+    echo "Uso: $0 nome_arq.c"
+    exit 1
+fi
+
+# Variável para o arquivo C de entrada (primeiro argumento)
+INPUT_FILE="$1"
+
+# Gera o nome do executável sem a extensão .c
+# Ex: se $1 for 'meu_programa.c', OUTPUT_FILE será 'meu_programa'
+OUTPUT_FILE="${INPUT_FILE%.c}"
+
+# Comando de compilação usando GCC
+echo "Compilando $INPUT_FILE para $OUTPUT_FILE..."
+gcc "$INPUT_FILE" -o "$OUTPUT_FILE"
+
+# Verifica se a compilação foi bem-sucedida ($? é o código de saída do último comando)
+if [ $? -eq 0 ]; then
+    echo "Compilação concluída com sucesso."
+    
+    # Executa o código compilado imediatamente
+    echo "Executando o programa..."
+    ./"$OUTPUT_FILE"
+    
+    # Exclui o executável após a execução:
+    rm "./$OUTPUT_FILE"
+    
+else
+    echo "Erro na compilação. A execução foi abortada."
+fi
